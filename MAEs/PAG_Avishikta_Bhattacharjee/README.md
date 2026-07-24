@@ -14,10 +14,10 @@ The core contribution of this work is a custom attention block that injects a **
 
 The existing attention mechanism uses a bias matrix $U$ to incline the transformer toward physics constraints on jet particles, achieving a strong baseline (ROC AUC > 0.90). To evaluate and improve attention across various benchmarks, this repository introduces a **gating mechanism** controlled by physics attention heads to further reduce noise from jet constituent data.
 
-### 1. Reconstructing Particle Kinematics
-Each constituent particle in a jet is defined by its 4-momentum $(p_T, \eta, \phi, E)$. These cylindrical collider coordinates convert to Cartesian 3D momentum $(p_x, p_y, p_z)$ via:
+### 1. Reused Physics Bias Attention Head for Gating
+Rather than calculating static physical shifts independently at every Transformer layer, the model utilizes a dedicated **Physics Bias Attention Head**. This module extracts the pairwise $U$-matrix—computed from Minkowski inner products—and fuses it with the global normalized invariant mass bias ($m^2$). 
 
-$$p_x = p_T \cos(\phi), \quad p_y = p_T \sin(\phi), \quad p_z = p_T \sinh(\eta), \quad p = p_T \cosh(\eta)$$
+This physical bias tensor is projected across key heads and **reused dynamically across encoder blocks** to act as a gating mask. By projecting and reusing these learned physical weights directly within the multi-head attention mechanism, the network modulates the query-key matrix ($QK^T$) before value aggregation, filtering out unphysical particle couplings and stabilizing training across dynamic batch shapes.
 
 ### 2. Global Invariant Mass Scalar ($m^2$)
 For a jet of $N$ particles, the total invariant mass squared ($m^2$) is computed across aggregate energy and momentum sums:
