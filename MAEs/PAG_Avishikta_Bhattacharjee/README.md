@@ -1,15 +1,18 @@
-# Physics-Aware Gated LorentzParT for Jet Reconstruction
+# Physics-Aware Gating in Transformer for Jet Classification
 
-This repository contains the implementation of a **Physics-Aware Gated Lorentz Particle Transformer (LorentzParT)** designed for self-supervised pre-training and jet reconstruction on high-energy physics datasets like **JetClass**. 
+<p align="center">
+  <img width="788" alt="GSoC Banner" src="https://github.com/user-attachments/assets/c5c91a0b-a0f6-4a92-b992-45d3f5fefaba" />
+</p>
+
+This repository contains the implementation of a **Physics-Aware Gating on Lorentz Particle Transformer (LorentzParT)** designed for self-supervised pre-training and jet reconstruction on high-energy physics datasets like **JetClass**.
 
 The core contribution of this work is a custom attention block that injects a **normalized global invariant mass bias ($m^2$)** alongside a **gated pairwise interaction matrix ($U$)** directly into the attention mechanism, enforcing fundamental Lorentz invariance and relativistic conservation laws.
 
 ---
 
-
 ## Description
 
-Standard Transformers evaluate token-to-token relationships purely through statistical dot-product attention ($QK^T$). In high-energy physics, this often leads to attention maps that violate basic physical constraints like energy-momentum conservation or relativistic invariance.
+The existing attention mechanism uses a bias matrix $U$ to incline the transformer toward physics constraints on jet particles, achieving a strong baseline (ROC AUC > 0.90). To evaluate and improve attention across various benchmarks, this repository introduces a **gating mechanism** controlled by physics attention heads to further reduce noise from jet constituent data.
 
 ### 1. Reconstructing Particle Kinematics
 Each constituent particle in a jet is defined by its 4-momentum $(p_T, \eta, \phi, E)$. These cylindrical collider coordinates convert to Cartesian 3D momentum $(p_x, p_y, p_z)$ via:
@@ -23,9 +26,9 @@ $$m^2 = \left(\sum_{i=1}^{N} E_i\right)^2 - \left\| \sum_{i=1}^{N} \vec{p}_i \ri
 
 To ensure numerical stability across varying energy scales, $m^2$ is feature-scaled to form a **normalized invariant mass bias**.
 
+---
 
-
-## 🛠️ Architecture Overview
+## Architecture Overview
 
 The model uses the encoder of LorentzParT embedded within a Variational Autoencoder (VAE) setup:
 1. **Masking:** Random constituent particles are masked during training.
@@ -34,6 +37,6 @@ The model uses the encoder of LorentzParT embedded within a Variational Autoenco
 
 ---
 
-## 📊 Evaluation & Results
+## Evaluation & Results
 
-Will add in the final submission (yet to upload)
+Will add in the final submission (yet to upload).
